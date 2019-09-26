@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<!-- 林志鹏 日期：2019年8月14日 -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>旋转木马轮播图</title>
+    <style>
+        /*初始化  reset*/
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        ul {
+            list-style: none
+        }
+
+        .wrap {
+            width: 1200px;
+            margin: 100px auto;
+        }
+
+        .slide {
+            height: 500px;
+            position: relative;
+        }
+
+        .slide li {
+            position: absolute;
+            left: 200px;
+            top: 0;
+            /* CSS3 过渡属性 */
+            transition: all .4s;
+        }
+
+        .slide li img {
+            width: 100%;
+        }
+
+        .prev,
+        .next {
+            width: 76px;
+            height: 112px;
+            position: absolute;
+            top: 50%;
+            margin-top: -56px;
+            background: url(images/prev.png) no-repeat;
+            z-index: 99;
+        }
+
+        .next {
+            right: 0;
+            background-image: url(images/next.png);
+        }
+
+        /* 旋转木马布局核心代码 */
+        .slide .zuo3 {
+            width: 400px;
+            top: 20px;
+            left: 50px;
+            opacity: 0.2;
+            z-index: 2;
+        }
+
+        .slide .zuo2 {
+            width: 600px;
+            top: 70px;
+            left: 0px;
+            opacity: 0.8;
+            z-index: 3;
+        }
+
+        .slide .zhong {
+            width: 800px;
+            top: 100px;
+            left: 200px;
+            opacity: 1;
+            z-index: 4;
+        }
+
+        .slide .you2 {
+            width: 600px;
+            top: 70px;
+            left: 600px;
+            opacity: 0.8;
+            z-index: 3;
+        }
+
+        .slide .you3 {
+            width: 400px;
+            top: 20px;
+            left: 750px;
+            opacity: 0.2;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap" id="wrap">
+        <div class="slide" id="slide">
+            <ul>
+                <li class="zuo3">
+                    <a href="#"><img alt="" src="images/slidepic1.jpg" /></a>
+                </li>
+                <li class="zuo2">
+                    <a href="#"><img alt="" src="images/slidepic2.jpg" /></a>
+                </li>
+                <li class="zhong">
+                    <a href="#"><img alt="" src="images/slidepic3.jpg" /></a>
+                </li>
+                <li class="you2">
+                    <a href="#"><img alt="" src="images/slidepic4.jpg" /></a>
+                </li>
+                <li class="you3">
+                    <a href="#"><img alt="" src="images/slidepic5.jpg" /></a>
+                </li>
+            </ul>
+            <div class="arrow" id="arrow">
+                <a class="prev" href="javascript:;" id="arrLeft"></a>
+                <a class="next" href="javascript:;" id="arrRight"></a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    /* 把所有li得到样式创建为数组 */
+    var styleArr = [
+        "zuo3",
+        "zuo2",
+        "zhong",
+        "you2",
+        "you3",
+    ];
+
+    // 查找元素
+    var Lis = document.querySelectorAll('li');
+    var arrLeft = document.querySelector('#arrLeft');
+    var arrRight = document.querySelector('#arrRight');
+
+    /* 封装动画效果 */
+    function effect() {
+        // for循环，让每个li都调用动画效果
+        for (var i = 0; i < Lis.length; i++) {
+            Lis[i].className = styleArr[i];
+        }
+    }
+
+    // 右部功能
+    function right_fn() {
+        /* 数组的第一份数据，移动到数组的最后 */
+        //  1.把数组的第一份数据取出来
+        var res = styleArr.shift();
+        //  添加到最后
+        styleArr.push(res);
+        // 在数组数据更新后，再调用动画函数即可
+        effect();
+    }
+
+    /* 右边箭头部分 */
+    arrRight.addEventListener('click', right_fn());
+
+    /* 左边箭头部分 */
+    arrLeft.addEventListener('click', function () {
+        // 把数组最后一份数据取出来
+        var res = styleArr.pop()
+        // 添加到数组最前面
+        styleArr.unshift(res);
+        effect();
+    })
+
+    // 自动轮播
+    var timerId = setInterval(right_fn,500);
+    // 移入停止自动
+    var box=document.querySelector('.wrap');
+    box.addEventListener('mouseover',function(){
+        clearInterval(timerId);
+    })
+    // 移出继续播放
+    box.addEventListener('mouseout',function(){
+        timerId = setInterval(right_fn,500);
+    })
+</script>
